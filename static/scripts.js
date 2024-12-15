@@ -1,10 +1,10 @@
-
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawCharts);
 
 let allExpressionData = [];
 let allCountData = [];
 let currentSort = 'alphabet';
+let tissueRange = [0, 100]; // Default range for the slider
 
 function drawCharts() {
     drawBarChart();
@@ -19,11 +19,16 @@ function drawBarChart(expressionData = []) {
 
     var options = {
         title: 'Gene Expression Levels',
+        colors: ['#007a7a'], // Updated bar chart color
         hAxis: {
             slantedText: true,
             slantedTextAngle: 90,
             textStyle: {
                 fontSize: 10
+            },
+            viewWindow: {
+                min: tissueRange[0],
+                max: tissueRange[1] === 100 ? expressionData.length : tissueRange[1] // Show all tissues if slider is at max
             }
         },
         vAxis: {
@@ -69,12 +74,17 @@ function drawCountBarChart() {
 
     var options = {
         title: 'Number of Donors per Tissue',
+        colors: ['#007a7a'], // Updated color scheme
         hAxis: {
             title: 'Tissue',
             slantedText: true,
             slantedTextAngle: 90,
             textStyle: {
                 fontSize: 10
+            },
+            viewWindow: {
+                min: tissueRange[0],
+                max: tissueRange[1] === 100 ? allCountData.length : tissueRange[1] // Show all tissues if slider is at max
             }
         },
         vAxis: {
@@ -191,12 +201,17 @@ function drawCountBarChartWithOrder() {
 
     var options = {
         title: 'Number of Donors per Tissue',
+        colors: ['#007a7a'], // Updated color scheme
         hAxis: {
             title: 'Tissue',
             slantedText: true,
             slantedTextAngle: 90,
             textStyle: {
                 fontSize: 10
+            },
+            viewWindow: {
+                min: tissueRange[0],
+                max: tissueRange[1] === 100 ? orderedCountData.length : tissueRange[1] // Show all tissues if slider is at max
             }
         },
         vAxis: {
@@ -250,6 +265,8 @@ function updateDiseasePathwayTable(data) {
     const tableBody = document.getElementById('disease_pathway_table_body');
     tableBody.innerHTML = '';
 
+    data.sort((a, b) => a.gene_id.localeCompare(b.gene_id)); // Sort data alphabetically by gene_id
+
     data.forEach(({ gene_id, description }) => {
         const row = document.createElement('tr');
         const geneIdCell = document.createElement('td');
@@ -301,6 +318,12 @@ function updateGeneIdDropdown(geneIds) {
     });
 }
 
+function updateTissueRange(min, max) {
+    tissueRange = [min, max];
+    drawBarChart(allExpressionData);
+    drawCountBarChart();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const firstGeneId = "{{ first_gene_id }}";
     if (firstGeneId) {
@@ -327,4 +350,16 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('sort_value').addEventListener('click', function() {
         sortData('value');
     });
+
+    const tissueSlider = document.getElementById('tissue_slider');
+    tissueSlider.addEventListener('input', function() {
+        const [min, max] = this.value.split(',').map(Number);
+        updateTissueRange(min, max);
+    });
+
+    // Sort the "Select Tissue" checkboxes alphabetically
+    const tissueCheckboxes = Array.from(document.querySelectorAll('.checkbox-container .form-check'));
+    tissueCheckboxes.sort((a, b) => a.querySelector('label').textContent.localeCompare(b.querySelector('label').textContent));
+    const checkboxContainer = document.querySelector('.checkbox-container');
+    tissueCheckboxes.forEach(checkbox => checkboxContainer.appendChild(checkbox));
 });

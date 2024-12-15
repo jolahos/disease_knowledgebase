@@ -1,5 +1,9 @@
 @import url('https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
 
+body {
+    background-color: #F5F1E6; /* Updated background color */
+}
+
 .google-visualization-tooltip {
     white-space: pre-wrap;
 }
@@ -38,17 +42,17 @@
     max-width: 25%;
 }
 .card-header {
-    background-color: #ffcc00; /* Attention-grabbing color */
-    color: #000; /* Text color */
+    background-color: #003f5a; /* Updated color */
+    color: #fff; /* Text color */
 }
 .btn-primary {
-    background-color: #ff00ff; /* Magenta color */
-    border-color: #ff00ff; /* Match border color */
+    background-color: #de6600; /* Updated color */
+    border-color: #de6600; /* Match border color */
 }
 .btn-primary:hover {
-    background-color: #cc00cc; /* Darker shade for hover */
-    border-color: #cc00cc; /* Match border color */
+    background-color: #b34d00; /* Darker shade for hover */
+    border-color: #b34d00; /* Match border color */
 }
 .table-hover tbody tr:hover {
-    background-color: rgba(255, 255, 0, 0.3); /* Light transparent yellow */
+    background-color: rgba(254, 160, 47, 0.3); /* Light transparent color */
 }

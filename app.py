@@ -45,18 +45,26 @@ class GeneInfo(db.Model):
 # Create a route to render the page with the dropdown menu
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/disease_explorer')
+def disease_explorer():
     gene_ids = db.session.query(GeneInfo.gene_id).distinct().all()
     tissues = db.session.query(GTExGeneExpression.tissue).distinct().all()  # Query tissues from GTExGeneExpression table
     disease_pathways = db.session.query(ImmuneDiseaseData.Disease_Pathway).distinct().all()
     first_gene_id = gene_ids[0][0] if gene_ids else None
-    return render_template('index.html', gene_ids=[gene_id[0] for gene_id in gene_ids], tissues=[tissue[0] for tissue in tissues], disease_pathways=[pathway[0] for pathway in disease_pathways], first_gene_id=first_gene_id)
+    return render_template('disease_explorer.html', gene_ids=[gene_id[0] for gene_id in gene_ids], tissues=[tissue[0] for tissue in tissues], disease_pathways=[pathway[0] for pathway in disease_pathways], first_gene_id=first_gene_id)
 
 # Create a route to handle the selection and display the average expression level
 @app.route('/result', methods=['POST'])
 def result():
     gene_id = request.form['gene_id']
     expression_data = db.session.query(GTExGeneExpression.tissue, db.func.avg(GTExGeneExpression.expression_level)).filter_by(gene_id=gene_id).group_by(GTExGeneExpression.tissue).all()
-    return render_template('result.html', gene_id=gene_id, expression_data=expression_data)
+    gene_ids = db.session.query(GeneInfo.gene_id).distinct().all()
+    tissues = db.session.query(GTExGeneExpression.tissue).distinct().all()
+    disease_pathways = db.session.query(ImmuneDiseaseData.Disease_Pathway).distinct().all()
+    first_gene_id = gene_ids[0][0] if gene_ids else None
+    return render_template('disease_explorer.html', gene_id=gene_id, expression_data=expression_data, gene_ids=[gene_id[0] for gene_id in gene_ids], tissues=[tissue[0] for tissue in tissues], disease_pathways=[pathway[0] for pathway in disease_pathways], first_gene_id=first_gene_id)
 
 # Create a new route to provide gene expression data as JSON
 @app.route('/api/gene_expression/<gene_id>', methods=['GET'])
