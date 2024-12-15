@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Disease Pathway</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .container {
+            margin: 40px auto; /* Adjust margin to make it wider */
+            max-width: 1200px; /* Adjust max-width to make the panel wider */
+        }
+        .table-container {
+            max-height: 250px; /* Adjust height to fit 7 lines */
+            overflow-y: auto;
+            position: relative;
+        }
+        .table-container thead th {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+    </style>
+    <script type="text/javascript">
+        function fetchDiseaseGenes(diseasePathway) {
+            fetch(`/api/disease_genes/${diseasePathway}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('disease_table_body');
+                    tableBody.innerHTML = '';
+
+                    data.forEach(item => {
+                        const row = document.createElement('tr');
+                        const geneNameCell = document.createElement('td');
+                        const descriptionCell = document.createElement('td');
+
+                        geneNameCell.textContent = item.gene_name;
+                        descriptionCell.textContent = item.description;
+
+                        row.appendChild(geneNameCell);
+                        row.appendChild(descriptionCell);
+                        tableBody.appendChild(row);
+                    });
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('disease_pathway').addEventListener('change', function() {
+                const diseasePathway = this.value;
+                fetchDiseaseGenes(diseasePathway);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h2>Select Disease Pathway</h2>
+            </div>
+            <div class="card-body">
+                <form id="disease_form" class="form-inline">
+                    <label for="disease_pathway" class="mr-2">Select Disease Pathway:</label>
+                    <select name="disease_pathway" id="disease_pathway" class="form-control mr-2">
+                        {% for pathway in disease_pathways %}
+                            <option value="{{ pathway }}">{{ pathway }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+                <div class="table-container mt-4">
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Gene Name</th>
+                                <th scope="col">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="disease_table_body">
+                            <!-- Table rows will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

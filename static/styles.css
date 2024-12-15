@@ -1,0 +1,54 @@
+@import url('https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
+
+.google-visualization-tooltip {
+    white-space: pre-wrap;
+}
+.checkbox-container {
+    max-height: 500px;
+    overflow-y: auto;
+}
+.table-container {
+    max-height: 250px; /* Adjust height to fit 7 lines */
+    overflow-y: auto;
+    position: relative;
+}
+.table-container thead th {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+}
+.container {
+    margin: 40px auto; /* Adjust margin to make it wider */
+    max-width: 1200px; /* Adjust max-width to make the panel wider */
+}
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+.col-md-9, .col-md-3 {
+    padding: 0 15px;
+}
+.col-md-9 {
+    flex: 0 0 75%;
+    max-width: 75%;
+}
+.col-md-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+}
+.card-header {
+    background-color: #ffcc00; /* Attention-grabbing color */
+    color: #000; /* Text color */
+}
+.btn-primary {
+    background-color: #ff00ff; /* Magenta color */
+    border-color: #ff00ff; /* Match border color */
+}
+.btn-primary:hover {
+    background-color: #cc00cc; /* Darker shade for hover */
+    border-color: #cc00cc; /* Match border color */
+}
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 0, 0.3); /* Light transparent yellow */
+}

@@ -1,0 +1,5 @@
+dependencies:
+  - Flask==2.0.1
+  - google-charts==0.1.0
+environment:
+  python_version: 3.8.10

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Gene</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <header class="mb-4">
+            <h1 class="text-center">Gene Expression Web Application</h1>
+        </header>
+        <section id="description" class="mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2>About this project</h2>
+                </div>
+                <div class="card-body">
+                    <p>This Flask web application provides an interface to explore gene expression data from the GTEx project and immune disease data. Users can view gene expression levels across different tissues, explore disease pathways, and retrieve gene information related to specific disease pathways.</p>
+                </div>
+            </div>
+        </section>
+        <div class="card mt-4">
+            <div class="card-header">
+                <h2>Select Disease Pathway</h2>
+            </div>
+            <div class="card-body">
+                <form id="disease_pathway_form" class="form-inline">
+                    <label for="disease_pathway" class="mr-2">Select Disease Pathway:</label>
+                    <select name="disease_pathway" id="disease_pathway" class="form-control mr-2">
+                        {% for pathway in disease_pathways %}
+                            <option value="{{ pathway }}">{{ pathway }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+                <div class="table-container mt-4">
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Gene ID</th>
+                                <th scope="col">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="disease_pathway_table_body">
+                            <!-- Table rows will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-4"> <!-- Added margin-top to create space -->
+            <div class="card-header">
+                <h2>Select Gene</h2>
+            </div>
+            <div class="card-body">
+                <form id="gene_form" class="form-inline">
+                    <label for="gene_id" class="mr-2">Select Gene ID:</label>
+                    <select name="gene_id" id="gene_id" class="form-control mr-2">
+                        {% for gene_id in gene_ids %}
+                            <option value="{{ gene_id }}">{{ gene_id }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+                <div class="row mt-4">
+                    <div class="col-md-9">
+                        <div id="chart_div" style="width: 100%; height: 600px;"></div>
+                        <div id="count_chart_div" style="width: 100%; height: 400px;" class="mt-4"></div>
+                        <div class="mt-4">
+                            <button id="sort_alphabet" class="btn btn-primary mr-2">Sort by Tissue</button>
+                            <button id="sort_value" class="btn btn-primary">Sort by Expression Level</button>
+                        </div>
+                        <div class="table-container mt-4">
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Tissue</th>
+                                        <th scope="col">Expression Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expression_table_body">
+                                    <!-- Table rows will be inserted here by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div id="filter_panel">
+                            <form id="filter_form">
+                                <div class="form-group">
+                                    <label for="tissue">Select Tissue:</label>
+                                    <div class="checkbox-container">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="tissue" value="all" id="all_tissue">
+                                            <label class="form-check-label" for="all_tissue">All</label>
+                                        </div>
+                                        {% for tissue in tissues %}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="tissue" value="{{ tissue }}" id="tissue_{{ tissue }}">
+                                                <label class="form-check-label" for="tissue_{{ tissue }}">{{ tissue }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="min_expression">Min Expression Level:</label>
+                                    <input type="number" name="min_expression" id="min_expression" step="0.01" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="max_expression">Max Expression Level:</label>
+                                    <input type="number" name="max_expression" id="max_expression" step="0.01" class="form-control">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
