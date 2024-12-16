@@ -1,4 +1,4 @@
-# Gene Expression Web Application
+# Immune Disease Knowledgebase
 
 ## Overview
 This Flask web application provides an interface to explore gene expression data from the GTEx project and immune disease data. Users can view gene expression levels across different tissues, explore disease pathways, and retrieve gene information related to specific disease pathways.
