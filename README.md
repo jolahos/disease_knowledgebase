@@ -3,6 +3,8 @@
 ## Overview
 This Flask web application provides an interface to explore gene expression data from the GTEx project and immune disease data. Users can view gene expression levels across different tissues, explore disease pathways, and retrieve gene information related to specific disease pathways.
 
+This project was developed as part of my Master’s studies in Data Science for Life Sciences, specifically for the module Database. The aim of this project was to explore the integration of biological datasets, leveraging database management and analysis techniques to address key challenges in life sciences.
+
 ## Features
 - View gene expression levels across different tissues
 - Explore disease pathways
@@ -54,6 +56,13 @@ This Flask web application provides an interface to explore gene expression data
 - `GET /api/expression_count/<gene_id>`: Retrieve the number of rows per tissue for a specific gene ID.
 - `POST /api/disease_pathway_data`: Retrieve gene information related to a specific disease pathway.
 - `POST /api/gene_ids_for_pathway`: Retrieve gene IDs related to a specific disease pathway.
+
+## Data Retrieval
+To retrieve data, you can use the following URL format:
+```html
+http://localhost:5000/api/data?tissue=Liver&gene=CTLA4
+change tissue and gene to your interest
+```
 
 ## License
 This project is licensed under the MIT License.

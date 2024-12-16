@@ -12,6 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # SQLAlchemy Configuration
+# add your username and password!
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1Xesdas11@localhost/immunology_disease_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -109,6 +110,16 @@ def get_gene_ids_for_pathway():
 
     gene_ids = db.session.query(GeneInfo.gene_id).join(ImmuneDiseaseData, GeneInfo.Entry == ImmuneDiseaseData.Entry).filter(ImmuneDiseaseData.Disease_Pathway == pathway).filter(GeneInfo.gene_id.in_(db.session.query(GTExGeneExpression.gene_id).distinct())).distinct().order_by(GeneInfo.gene_id).all()
     return jsonify([gene_id[0] for gene_id in gene_ids])
+
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    tissue = request.args.get('tissue')
+    gene = request.args.get('gene')
+    expression_data = db.session.query(GTExGeneExpression).filter_by(tissue=tissue, gene_id=gene).all()
+    if not expression_data:
+        return jsonify({"error": "No data found for the given tissue and gene"}), 404
+    result = [{"tissue": data.tissue, "gene_id": data.gene_id, "expression_level": data.expression_level} for data in expression_data]
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(debug=True)
