@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 # SQLAlchemy Configuration
 # add your username and password!
+###
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@localhost/immunology_disease_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
